@@ -2,7 +2,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface IVideo extends Document {
-  _id: string;
   title: string;
   description: string;
   thumbnail: string;
@@ -105,8 +104,9 @@ const videoSchema: Schema<IVideo> = new Schema(
       virtuals: true,
       transform: function (doc, ret) {
         ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
+        const serialized = ret as Record<string, unknown>;
+        delete serialized._id;
+        delete serialized.__v;
         return ret;
       },
     },
@@ -114,12 +114,13 @@ const videoSchema: Schema<IVideo> = new Schema(
       virtuals: true,
       transform: function (doc, ret) {
         ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
+        const serialized = ret as Record<string, unknown>;
+        delete serialized._id;
+        delete serialized.__v;
         return ret;
       },
     },
-  }
+  },
 );
 
 // Compound indexes for efficient queries

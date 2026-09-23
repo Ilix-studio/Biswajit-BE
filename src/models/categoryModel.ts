@@ -2,7 +2,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export interface ICategory extends Document {
-  _id: string;
   name: string;
   type: "photo" | "video" | "press";
   createdAt: Date;
@@ -30,13 +29,14 @@ const categorySchema: Schema<ICategory> = new Schema(
     toJSON: {
       transform: function (doc, ret) {
         ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-        delete ret.updatedAt;
+        const serialized = ret as Record<string, unknown>;
+        delete serialized._id;
+        delete serialized.__v;
+        delete serialized.updatedAt;
         return ret;
       },
     },
-  }
+  },
 );
 
 // Compound index to prevent duplicate names within same type

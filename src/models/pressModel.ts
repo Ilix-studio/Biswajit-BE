@@ -9,7 +9,6 @@ interface IPressImage {
 }
 
 export interface IPress extends Document {
-  _id: string;
   title: string;
   source: string;
   date: Date;
@@ -125,7 +124,7 @@ const pressSchema: Schema<IPress> = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Index for search functionality
