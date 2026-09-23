@@ -11,7 +11,10 @@ export const getCategoriesByType = asyncHandler(
   async (req: Request, res: Response) => {
     const { type } = req.params;
 
-    if (!["photo", "video", "press"].includes(type)) {
+    if (
+      typeof type !== "string" ||
+      !["photo", "video", "press"].includes(type)
+    ) {
       res.status(400);
       throw new Error("Invalid category type");
     }
@@ -22,7 +25,7 @@ export const getCategoriesByType = asyncHandler(
       success: true,
       data: categories,
     });
-  }
+  },
 );
 
 /**
@@ -38,7 +41,7 @@ export const getAllCategories = asyncHandler(
       success: true,
       data: categories,
     });
-  }
+  },
 );
 
 /**
@@ -57,7 +60,7 @@ export const createCategory = asyncHandler(
       message: "Category created successfully",
       data: category,
     });
-  }
+  },
 );
 
 /**
@@ -72,7 +75,7 @@ export const updateCategory = asyncHandler(
     const category = await CategoryModel.findByIdAndUpdate(
       req.params.id,
       { name },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!category) {
@@ -85,7 +88,7 @@ export const updateCategory = asyncHandler(
       message: "Category updated successfully",
       data: category,
     });
-  }
+  },
 );
 
 /**
@@ -124,5 +127,5 @@ export const deleteCategory = asyncHandler(
       success: true,
       message: "Category deleted successfully",
     });
-  }
+  },
 );

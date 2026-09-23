@@ -29,7 +29,7 @@ export const generateSignature = asyncHandler(
 
     const signature = cloudinary.utils.api_sign_request(
       { timestamp, folder },
-      apiSecret
+      apiSecret,
     );
 
     res.status(200).json({
@@ -39,7 +39,7 @@ export const generateSignature = asyncHandler(
       apiKey,
       folder,
     });
-  }
+  },
 );
 
 /**
@@ -83,7 +83,7 @@ export const uploadMultipleImages = asyncHandler(
               if (error) {
                 logger.error(
                   `Cloudinary upload error for file ${index}:`,
-                  error
+                  error,
                 );
                 reject(error);
               } else {
@@ -97,7 +97,7 @@ export const uploadMultipleImages = asyncHandler(
                   bytes: result!.bytes,
                 });
               }
-            }
+            },
           )
           .end(file.buffer);
       });
@@ -106,7 +106,7 @@ export const uploadMultipleImages = asyncHandler(
     const uploadedImages = await Promise.all(uploadPromises);
 
     logger.info(
-      `Successfully uploaded ${uploadedImages.length} images to Cloudinary`
+      `Successfully uploaded ${uploadedImages.length} images to Cloudinary`,
     );
 
     res.status(200).json({
@@ -117,7 +117,7 @@ export const uploadMultipleImages = asyncHandler(
         count: uploadedImages.length,
       },
     });
-  }
+  },
 );
 
 /**
@@ -153,7 +153,7 @@ export const uploadSingleImage = asyncHandler(
             } else {
               resolve(result);
             }
-          }
+          },
         )
         .end(req.file!.buffer);
     });
@@ -173,7 +173,7 @@ export const uploadSingleImage = asyncHandler(
         bytes: result.bytes,
       },
     });
-  }
+  },
 );
 
 /**
@@ -212,7 +212,7 @@ export const deleteMultipleImages = asyncHandler(
         (result) =>
           result.status === "rejected" ||
           (result.status === "fulfilled" &&
-            !(result as PromiseFulfilledResult<any>).value.success)
+            !(result as PromiseFulfilledResult<any>).value.success),
       )
       .map((result, index) => ({
         publicId: publicIds[index],
@@ -232,7 +232,7 @@ export const deleteMultipleImages = asyncHandler(
         failedCount: failed.length,
       },
     });
-  }
+  },
 );
 
 /**
@@ -244,7 +244,7 @@ export const deleteCloudinaryImage = asyncHandler(
   async (req: Request, res: Response) => {
     const { publicId } = req.params;
 
-    if (!publicId) {
+    if (typeof publicId !== "string" || !publicId) {
       res.status(400);
       throw new Error("Public ID is required");
     }
@@ -264,7 +264,7 @@ export const deleteCloudinaryImage = asyncHandler(
         result: result.result,
       },
     });
-  }
+  },
 );
 
 /**
@@ -276,7 +276,7 @@ export const getImageDetails = asyncHandler(
   async (req: Request, res: Response) => {
     const { publicId } = req.params;
 
-    if (!publicId) {
+    if (typeof publicId !== "string" || !publicId) {
       res.status(400);
       throw new Error("Public ID is required");
     }
@@ -296,7 +296,7 @@ export const getImageDetails = asyncHandler(
         folder: details.folder,
       },
     });
-  }
+  },
 );
 
 /**
@@ -334,5 +334,5 @@ export const listImagesInFolder = asyncHandler(
         totalCount: result.total_count,
       },
     });
-  }
+  },
 );
